@@ -16,10 +16,9 @@ export const AlbumForm = ({ artistId }: AlbumFormProps) => {
     if (form.checkValidity() === true) {
       setValidated(true);
       // continue with the data
-      // trim & toUppercase the title
       ArtistController.addAlbumToArtist.call({
         artistId: artistId,
-        title: title,
+        title: title.trim(),
       });
       setTitle("");
     }

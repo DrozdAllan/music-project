@@ -68,6 +68,16 @@ export const ArtistController = {
       return ArtistCollection.insert(newArtist);
     },
   }),
+  // Delete Artist
+  deleteArtist: new ValidatedMethod({
+    name: "artists.deleteArtist",
+    validate: null,
+    run(args: { artistId: string }) {
+      return ArtistCollection.remove({
+        _id: args.artistId,
+      });
+    },
+  }),
   // Update Artist to add a new Album
   addAlbumToArtist: new ValidatedMethod({
     name: "artists.addAlbumToArtist",
@@ -119,16 +129,6 @@ export const ArtistController = {
           },
         }
       );
-    },
-  }),
-  // Delete Artist
-  deleteArtist: new ValidatedMethod({
-    name: "artists.deleteArtist",
-    validate: null,
-    run(args: { artistId: string }) {
-      return ArtistCollection.remove({
-        _id: args.artistId,
-      });
     },
   }),
 };

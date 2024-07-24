@@ -8,10 +8,9 @@ import { Col, Row } from "react-bootstrap";
 
 export const AlbumList = ({ album }: { album: AlbumInterface }) => {
   function removeSong(song: string) {
-    console.log("song to remove: ", song);
     ArtistController.deleteSongFromAlbum.call({
       albumId: album._id,
-      title: song,
+      title: song.trim(),
     });
   }
 

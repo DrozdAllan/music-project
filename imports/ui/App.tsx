@@ -10,6 +10,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
 export const App = () => {
   const isLoading = useSubscribe("artists.allArtists");
@@ -19,10 +20,8 @@ export const App = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleSubmit = () => {
-    console.log("form is okay");
     ArtistController.createArtist.call({
       name: name,
-      // albums: ,
     });
     setShow(false);
   };
@@ -30,7 +29,7 @@ export const App = () => {
   const artists = useFind(() => ArtistCollection.find({}, []));
 
   if (isLoading()) {
-    return <h3>LOADING...</h3>;
+    return <Spinner animation="border" variant="dark" />;
   }
 
   return (
