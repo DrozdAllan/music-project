@@ -6,7 +6,7 @@ import {
 } from "../../api/artist/artist";
 import { AlbumList } from "./AlbumList";
 import Accordion from "react-bootstrap/Accordion";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 import { AlbumForm } from "./AlbumForm";
 
 export const ArtistList = ({ artist }: { artist: ArtistInterface }) => {
@@ -20,19 +20,19 @@ export const ArtistList = ({ artist }: { artist: ArtistInterface }) => {
       </Accordion.Header>
 
       <Accordion.Body>
-        <Row>
-          <Col>
-            {artist.albums.map((album: AlbumInterface) => {
-              return <AlbumList album={album} key={album._id} />;
-            })}
-          </Col>
-          <Col>
-            <AlbumForm artistId={artist._id!} />
-            <Button variant="danger" onClick={deleteArtist}>
+        <Stack>
+          {artist.albums.map((album: AlbumInterface) => {
+            return <AlbumList album={album} key={album._id} />;
+          })}
+
+          <AlbumForm artistId={artist._id!} artistName={artist.name} />
+
+          <div className="text-center mt-2">
+            <Button size="sm" variant="danger" onClick={deleteArtist}>
               Delete artist
             </Button>
-          </Col>
-        </Row>
+          </div>
+        </Stack>
       </Accordion.Body>
     </Accordion.Item>
   );

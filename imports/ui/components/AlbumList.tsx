@@ -5,6 +5,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import { SongForm } from "./SongForm";
 import { Col, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export const AlbumList = ({ album }: { album: AlbumInterface }) => {
   function removeSong(song: string) {
@@ -30,14 +32,17 @@ export const AlbumList = ({ album }: { album: AlbumInterface }) => {
             <ListGroup>
               {album.songs!.map((song: string) => {
                 return (
-                  <ListGroup.Item key={song}>
+                  <ListGroup.Item
+                    key={song}
+                    className="d-flex justify-content-between"
+                  >
                     <span>{song}</span>
                     <Button
                       variant="outline-danger"
                       size="sm"
                       onClick={() => removeSong(song)}
                     >
-                      x
+                      <FontAwesomeIcon className="fa-xs" icon={faXmark} />
                     </Button>
                   </ListGroup.Item>
                 );
@@ -45,7 +50,7 @@ export const AlbumList = ({ album }: { album: AlbumInterface }) => {
             </ListGroup>
           </Col>
           <Col>
-            <SongForm albumId={album._id} />
+            <SongForm albumId={album._id} albumName={album.name} />
           </Col>
         </Row>
       </Accordion.Body>
