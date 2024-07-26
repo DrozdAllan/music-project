@@ -9,16 +9,20 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.5",
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.0.13",
+    "@mui/icons-material": "^5.16.5",
+    "@mui/material": "^5.16.5",
+    "@mui/x-date-pickers": "^7.11.1",
     "@types/meteor-mdg-validated-method": "^1.2.10",
-    "bootstrap": "^5.3.3",
+    "dayjs": "^1.11.12",
+    "formik": "^2.4.6",
     "meteor-node-stubs": "^1.2.7",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.10.4",
     "react-dom": "^18.2.0",
-    "simpl-schema": "^3.4.6"
+    "simpl-schema": "^3.4.6",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.3",

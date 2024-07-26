@@ -5,35 +5,52 @@ import {
   ArtistInterface,
 } from "../../api/artist/artist";
 import { AlbumList } from "./AlbumList";
-import Accordion from "react-bootstrap/Accordion";
-import { Button, Stack } from "react-bootstrap";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Button from "@mui/material/Button";
 import { AlbumForm } from "./AlbumForm";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import { Stack } from "@mui/material";
 
 export const ArtistList = ({ artist }: { artist: ArtistInterface }) => {
-  function deleteArtist() {
-    ArtistController.deleteArtist.call({ artistId: artist._id! });
+  function removeArtist() {
+    ArtistController.removeArtist.call({ artistId: artist._id! });
   }
   return (
-    <Accordion.Item eventKey={artist._id!}>
-      <Accordion.Header>
-        <h4>{artist.name}</h4>
-      </Accordion.Header>
+    <Accordion
+      sx={{
+        bgcolor: "#CFE2FF",
+      }}
+    >
+      <AccordionSummary>
+        <Typography variant="h4">{artist.name}</Typography>
+      </AccordionSummary>
 
-      <Accordion.Body>
-        <Stack>
-          {artist.albums.map((album: AlbumInterface) => {
-            return <AlbumList album={album} key={album._id} />;
-          })}
+      <AccordionDetails>
+        <Grid container>
+          <Grid item xs={12}>
+            {artist.albums.map((album: AlbumInterface) => {
+              return <AlbumList album={album} key={album._id} />;
+            })}
+          </Grid>
+          <Grid item xs={12}>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <AlbumForm artistId={artist._id!} artistName={artist.name} />
 
-          <AlbumForm artistId={artist._id!} artistName={artist.name} />
-
-          <div className="text-center mt-2">
-            <Button size="sm" variant="danger" onClick={deleteArtist}>
-              Delete artist
-            </Button>
-          </div>
-        </Stack>
-      </Accordion.Body>
-    </Accordion.Item>
+              <Button variant="outlined" color="error" onClick={removeArtist}>
+                Remove artist
+              </Button>
+            </Stack>
+          </Grid>
+        </Grid>
+      </AccordionDetails>
+    </Accordion>
   );
 };

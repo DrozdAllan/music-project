@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button, Stack } from "react-bootstrap";
+import { Box, Button, TextField, Typography } from "@mui/material/";
 import { ArtistController } from "/imports/api/artist/artist";
 import { toTitleCase } from "../utils";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 interface AlbumFormProps {
   artistId: string;
@@ -9,14 +12,12 @@ interface AlbumFormProps {
 }
 
 export const AlbumForm = ({ artistId, artistName }: AlbumFormProps) => {
-  const [validated, setValidated] = useState(false);
   const [title, setTitle] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
-      setValidated(true);
       // continue with the data
       ArtistController.addAlbumToArtist.call({
         artistId: artistId,
@@ -27,30 +28,32 @@ export const AlbumForm = ({ artistId, artistName }: AlbumFormProps) => {
   };
 
   return (
-    <Form
-      className="py-2"
-      noValidate
-      validated={validated}
-      onSubmit={handleSubmit}
-    >
-      <Form.Group controlId="albumForm.ControlInput1">
-        <Form.Label>Add a new album to {artistName}</Form.Label>
-        <Stack direction="horizontal" gap={2}>
-          <Form.Control
-            required
-            size="sm"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Form.Control.Feedback type="invalid">
-            Title is required
-          </Form.Control.Feedback>
-          <Button size="sm" variant="primary" type="submit">
-            Confirm
-          </Button>
-        </Stack>
-      </Form.Group>
-    </Form>
+    <>
+      <Typography>Add a new album to {artistName}</Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 2,
+          mt: 4,
+        }}
+      >
+        <TextField
+          label="Title"
+          value={title}
+          required
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker />
+        </LocalizationProvider>
+        <Button type="submit" variant="contained" color="primary">
+          Add Album
+        </Button>
+      </Box>
+    </>
   );
 };
