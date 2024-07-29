@@ -4,20 +4,25 @@ import { ArtistController } from "../api/artist/artist";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Button, Dialog, TextField } from "@mui/material/";
+import { Button, Dialog, TextField, ThemeProvider } from "@mui/material/";
 import { toTitleCase } from "./utils";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { myTheme } from "./theme";
 
 export const App = () => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setError(false);
+  };
   const handleShow = () => setOpen(true);
 
   return (
-    <>
+    <ThemeProvider theme={myTheme}>
       <AppBar
         position="static"
         sx={{
@@ -48,14 +53,14 @@ export const App = () => {
               const formJson = Object.fromEntries((formData as any).entries());
               const name = formJson.name;
 
-              console.log(name);
-              const form = event.currentTarget;
-              if (form.checkValidity() === true) {
+              if (!name.trim()) {
+                setError(true);
+              } else {
                 ArtistController.createArtist.call({
                   name: toTitleCase(name.trim()),
                 });
+                handleClose();
               }
-              handleClose();
             },
           }}
         >
@@ -63,10 +68,11 @@ export const App = () => {
           <DialogContent>
             <TextField
               autoFocus
-              required
               label="Name"
               name="name"
               variant="standard"
+              error={error}
+              helperText={error ? "Name is required" : ""}
             />
           </DialogContent>
           <DialogActions>
@@ -77,6 +83,6 @@ export const App = () => {
         </Dialog>
       </AppBar>
       <Home />
-    </>
+    </ThemeProvider>
   );
 };

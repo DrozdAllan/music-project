@@ -10,6 +10,7 @@ import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import Button from "@mui/material/Button";
 import { IconButton, Stack, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ClearIcon from "@mui/icons-material/Clear";
 
 export const AlbumList = ({ album }: { album: AlbumInterface }) => {
@@ -28,11 +29,11 @@ export const AlbumList = ({ album }: { album: AlbumInterface }) => {
 
   return (
     <Accordion>
-      <AccordionSummary>
-        <Typography variant="h6">
+      <AccordionSummary className="fixedBg" expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="body1">
           {album.name} (
           {album.releaseDate.toLocaleDateString(undefined, {
-            month: "long",
+            month: "numeric",
             year: "numeric",
           })}
           )

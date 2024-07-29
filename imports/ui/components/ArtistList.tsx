@@ -8,6 +8,7 @@ import { AlbumList } from "./AlbumList";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import { AlbumForm } from "./AlbumForm";
 import Typography from "@mui/material/Typography";
@@ -19,13 +20,9 @@ export const ArtistList = ({ artist }: { artist: ArtistInterface }) => {
     ArtistController.removeArtist.call({ artistId: artist._id! });
   }
   return (
-    <Accordion
-      sx={{
-        bgcolor: "#CFE2FF",
-      }}
-    >
-      <AccordionSummary>
-        <Typography variant="h4">{artist.name}</Typography>
+    <Accordion>
+      <AccordionSummary className="fixedBg" expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="h5">{artist.name}</Typography>
       </AccordionSummary>
 
       <AccordionDetails>

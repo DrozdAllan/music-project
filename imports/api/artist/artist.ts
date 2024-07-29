@@ -82,10 +82,15 @@ export const ArtistController = {
   addAlbumToArtist: new ValidatedMethod({
     name: "artists.addAlbumToArtist",
     validate: null,
-    run(args: { artistId: string; title: string; songs?: [] }) {
+    run(args: {
+      artistId: string;
+      title: string;
+      releaseDate?: Date;
+      songs?: [];
+    }) {
       const newAlbum: AlbumInterface = {
         _id: Math.floor(Math.random() * 1000).toString(),
-        releaseDate: new Date(),
+        releaseDate: args.releaseDate!,
         name: args.title,
         songs: [],
       };

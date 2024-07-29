@@ -5,6 +5,7 @@ import { toTitleCase } from "../utils";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 interface AlbumFormProps {
   artistId: string;
@@ -13,23 +14,43 @@ interface AlbumFormProps {
 
 export const AlbumForm = ({ artistId, artistName }: AlbumFormProps) => {
   const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState(false);
+  const [releaseDate, setReleaseDate] = React.useState<Dayjs | null>(dayjs(""));
+  const [dateError, setDateError] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === true) {
+    let valid = true;
+
+    if (!title.trim()) {
+      setTitleError(true);
+      valid = false;
+    } else {
+      setTitleError(false);
+    }
+
+    if (!releaseDate?.isValid()) {
+      setDateError(true);
+      valid = false;
+    } else {
+      setDateError(false);
+    }
+
+    if (valid) {
       // continue with the data
       ArtistController.addAlbumToArtist.call({
         artistId: artistId,
         title: toTitleCase(title.trim()),
+        releaseDate: releaseDate?.toDate(),
       });
       setTitle("");
+      setReleaseDate(dayjs(""));
     }
   };
 
   return (
     <>
-      <Typography>Add a new album to {artistName}</Typography>
+      <Typography sx={{ pt: 1 }}>Add a new album to {artistName}</Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -38,17 +59,28 @@ export const AlbumForm = ({ artistId, artistName }: AlbumFormProps) => {
           flexDirection: "row",
           alignItems: "center",
           gap: 2,
-          mt: 4,
         }}
       >
         <TextField
           label="Title"
           value={title}
-          required
           onChange={(e) => setTitle(e.target.value)}
+          error={titleError}
+          helperText={titleError ? "Title is required" : ""}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker />
+          <DatePicker
+            value={releaseDate}
+            onChange={(newDate) => setReleaseDate(newDate)}
+            slots={{ textField: TextField }}
+            slotProps={{
+              textField: {
+                required: true,
+                error: dateError,
+                helperText: dateError ? "Date is required" : "",
+              },
+            }}
+          />
         </LocalizationProvider>
         <Button type="submit" variant="contained" color="primary">
           Add Album

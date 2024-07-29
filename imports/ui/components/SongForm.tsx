@@ -10,11 +10,14 @@ interface SongFormProps {
 
 export const SongForm = ({ albumId, albumName }: SongFormProps) => {
   const [title, setTitle] = useState("");
+  const [error, setError] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === true) {
+    if (!title.trim()) {
+      setError(true);
+    } else {
+      setError(false);
       // continue with the data
       ArtistController.addSongToAlbum.call({
         albumId: albumId,
@@ -38,10 +41,11 @@ export const SongForm = ({ albumId, albumName }: SongFormProps) => {
     >
       <Typography>Add a new song to {albumName}</Typography>
       <TextField
-        required
         label="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        error={error}
+        helperText={error ? "Title is required" : ""}
       />
       <Button type="submit" variant="contained" color="primary">
         Add Song
