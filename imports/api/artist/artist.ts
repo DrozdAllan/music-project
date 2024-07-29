@@ -68,9 +68,9 @@ export const ArtistController = {
       return ArtistCollection.insert(newArtist);
     },
   }),
-  // Delete Artist
-  deleteArtist: new ValidatedMethod({
-    name: "artists.deleteArtist",
+  // Remove Artist
+  removeArtist: new ValidatedMethod({
+    name: "artists.removeArtist",
     validate: null,
     run(args: { artistId: string }) {
       return ArtistCollection.remove({
@@ -82,10 +82,15 @@ export const ArtistController = {
   addAlbumToArtist: new ValidatedMethod({
     name: "artists.addAlbumToArtist",
     validate: null,
-    run(args: { artistId: string; title: string; songs?: [] }) {
+    run(args: {
+      artistId: string;
+      title: string;
+      releaseDate?: Date;
+      songs?: [];
+    }) {
       const newAlbum: AlbumInterface = {
         _id: Math.floor(Math.random() * 1000).toString(),
-        releaseDate: new Date(),
+        releaseDate: args.releaseDate!,
         name: args.title,
         songs: [],
       };
@@ -96,6 +101,25 @@ export const ArtistController = {
         {
           $push: {
             albums: newAlbum,
+          },
+        }
+      );
+    },
+  }),
+  // Update Artist to remove an Album
+  removeAlbumFromArtist: new ValidatedMethod({
+    name: "artists.removeAlbumFromArtist",
+    validate: null,
+    run(args: { albumId: string }) {
+      return ArtistCollection.update(
+        {
+          "albums._id": args.albumId,
+        },
+        {
+          $pull: {
+            albums: {
+              _id: args.albumId,
+            },
           },
         }
       );
@@ -116,9 +140,9 @@ export const ArtistController = {
       );
     },
   }),
-  // Update Artist to pull a song from an Album
-  deleteSongFromAlbum: new ValidatedMethod({
-    name: "artists.deleteSongFromAlbum",
+  // Update Artist to remove a song from an Album
+  removeSongFromAlbum: new ValidatedMethod({
+    name: "artists.removeSongFromAlbum",
     validate: null,
     run(args: { albumId: string; title: string }) {
       return ArtistCollection.update(

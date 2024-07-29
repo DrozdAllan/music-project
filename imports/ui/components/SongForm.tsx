@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Stack } from "react-bootstrap";
+import { Box, Button, TextField, Typography } from "@mui/material/";
 import { ArtistController } from "/imports/api/artist/artist";
 import { toTitleCase } from "../utils";
 
@@ -9,14 +9,15 @@ interface SongFormProps {
 }
 
 export const SongForm = ({ albumId, albumName }: SongFormProps) => {
-  const [validated, setValidated] = useState(false);
   const [title, setTitle] = useState("");
+  const [error, setError] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === true) {
-      setValidated(true);
+    if (!title.trim()) {
+      setError(true);
+    } else {
+      setError(false);
       // continue with the data
       ArtistController.addSongToAlbum.call({
         albumId: albumId,
@@ -27,25 +28,28 @@ export const SongForm = ({ albumId, albumName }: SongFormProps) => {
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Form.Group controlId="songForm.ControlInput1">
-        <Form.Label>Add a new song to {albumName}</Form.Label>
-        <Stack gap={2}>
-          <Form.Control
-            required
-            size="sm"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Form.Control.Feedback type="invalid">
-            Title is required
-          </Form.Control.Feedback>
-          <Button size="sm" variant="primary" type="submit">
-            Confirm
-          </Button>
-        </Stack>
-      </Form.Group>
-    </Form>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 2,
+        mt: 4,
+      }}
+    >
+      <Typography>Add a new song to {albumName}</Typography>
+      <TextField
+        label="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        error={error}
+        helperText={error ? "Title is required" : ""}
+      />
+      <Button type="submit" variant="contained" color="primary">
+        Add Song
+      </Button>
+    </Box>
   );
 };
